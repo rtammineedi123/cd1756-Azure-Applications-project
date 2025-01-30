@@ -7,6 +7,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_session import Session
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -20,6 +21,7 @@ logging.basicConfig(
     filename = path,
     level=logging.INFO,
     format='%(pathname)s:%(lineno)d - %(message)s; %(asctime)s [%(levelname)s]'
+)
 handler = logging.StreamHandler()
 handler.setLevel(logging.INFO)
 handler_format = logging.Formatter('%(message)s - %(asctime)s')
