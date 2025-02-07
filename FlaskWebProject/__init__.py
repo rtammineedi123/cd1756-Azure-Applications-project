@@ -16,18 +16,32 @@ if not os.path.exists('logs'):
   os.mkdir('logs')
 
 path = os.path.join('logs','flaskapp.log')
+# Get the root logger
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
-logging.basicConfig(
-    filename = path,
-    level=logging.INFO,
-    format='%(pathname)s:%(lineno)d - %(message)s; %(asctime)s [%(levelname)s]'
+# File Handler for logging to a file
+file_handler = logging.FileHandler(path)
+file_handler.setLevel(logging.INFO)
+file_formatter = logging.Formatter(
+    '%(pathname)s:%(lineno)d - %(message)s; %(asctime)s [%(levelname)s]'
 )
-handler = logging.StreamHandler()
-handler.setLevel(logging.INFO)
-handler_format = logging.Formatter('%(message)s - %(asctime)s')
-handler.setFormatter(handler_format)
+file_handler.setFormatter(file_formatter)
 
-app.logger.addHandler(handler)
+# Stream Handler for logging to the console (log stream)
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.INFO)
+stream_formatter = logging.Formatter('%(message)s - %(asctime)s')
+stream_handler.setFormatter(stream_formatter)
+
+# Add both handlers to the root logger
+logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
+
+# Optionally, if you have a specific app logger
+app.logger.handlers = logger.handlers
+app.logger.setLevel(logger.level)
+
 app.logger.info('Starting WebProject')
 
 Session(app)
